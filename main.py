@@ -18,6 +18,7 @@ import webapp2
 import jinja2
 import os
 import problem_list as plist
+import Problem as p
 
 FOLDERNAME = "templates" 	# only for self.render(template)   e.g. html files
 
@@ -47,15 +48,32 @@ class Handler(webapp2.RequestHandler):
 class MainHandler(Handler):
     def get(self):
         self.render('home.html')
+    def post(self):
+    	id = self.request.get('q')
+    	if id and id.isdigit():
+    		id = int(id)
+    		self.write("searching for %d...."%id)
+    		self.write("Don't wait for it. It's not really searching.")
 
 
 class CalculatorHandler(Handler):
 	def get(self):
 		self.render('calc.html')
+
+		#cont = '''A horizontal turntable is made from a uniform solid disk and is initially rotating with&nbsp;angular velocity of 9.7 rad/s&nbsp;about a fixed vertical axis through its center. The turntable&nbsp;has a radius of 0.36 m and&nbsp;a moment of inertia of 0.17496 kg m<sup>2&nbsp;</sup>about the rotation axis.&nbsp;'''
+		pid = 12345
+		#vlst = ['omega','r','I','d','omegaf']
+		#problem = p.Problem(content=cont,id=pid,vlst=vlst)
+		#problem.put()
+
+		prob1 = p.query_id(pid)
+		self.write(prob1)
+
+
 	def post(self):
 		v_list = [12,34,56]
-		qid = 12345
-		ans = eval("qlist._%s(%s)"%(qid,v_list))
+		pid = 12345
+		ans = eval("qlist._%s(%s)"%(pid,v_list))
 		self.render('calc.html',answer=ans)
 		self.write("post")
 
